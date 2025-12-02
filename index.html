@@ -191,23 +191,23 @@
                 <div class="flex items-center gap-3 mb-3">
                     <i class="fas fa-building text-blue-500 text-2xl"></i>
                     <div>
-                        <p class="font-bold text-blue-800">Visura Camerale - Prezzo speciale</p>
+                        <p class="font-bold text-blue-800">Visura Camerale - Prezzi</p>
                     </div>
                 </div>
                 <div class="space-y-2">
                     <div class="flex items-center justify-between p-3 bg-white rounded-lg border border-blue-100">
                         <div>
-                            <p class="font-medium text-gray-800">Firma Digitale</p>
+                            <p class="font-medium text-gray-800">Firma Digitale <span class="text-green-600 text-xs ml-1">CONSIGLIATO</span></p>
                             <p class="text-xs text-gray-500">Consegna immediata via email</p>
                         </div>
                         <span class="text-xl font-bold text-blue-600">€100</span>
                     </div>
-                    <div class="flex items-center justify-between p-3 bg-white rounded-lg border border-green-200">
+                    <div class="flex items-center justify-between p-3 bg-white rounded-lg border border-amber-200">
                         <div>
-                            <p class="font-medium text-gray-800">Giuramento Tribunale <span class="text-green-600 text-xs ml-1">RISPARMIA €14</span></p>
-                            <p class="text-xs text-gray-500">Marca da bollo inclusa • Consegna giorno successivo</p>
+                            <p class="font-medium text-gray-800">Giuramento Tribunale</p>
+                            <p class="text-xs text-gray-500">€150 + marche da bollo in base al numero pagine</p>
                         </div>
-                        <span class="text-xl font-bold text-green-600">€86</span>
+                        <span class="text-xl font-bold text-amber-600">da €166</span>
                     </div>
                 </div>
             </div>
@@ -336,9 +336,9 @@
                         <div class="flex-1">
                             <div class="flex items-center justify-between">
                                 <span class="font-medium">Giuramento in Tribunale</span>
-                                <span class="font-bold text-amber-600" id="tribunal-price">+€16/4 facciate</span>
+                                <span class="font-bold text-amber-600" id="tribunal-price-label">€86</span>
                             </div>
-                            <p class="text-sm text-gray-500 mt-1">Marca da bollo da €16 ogni 4 facciate. Consegna il giorno successivo.</p>
+                            <p class="text-sm text-gray-500 mt-1" id="tribunal-desc">Documenti standard (max 2-3 pagine). Marca da bollo inclusa. Consegna il giorno successivo.</p>
                         </div>
                     </label>
                 </div>
@@ -648,20 +648,41 @@
         function updateSignatureType() {
             signatureType = document.querySelector('input[name="signature-type"]:checked').value;
             const isVisura = selectedDocType === 'visura';
+            const isVoluminoso = selectedDocType === 'voluminoso';
+
+            // Update tribunal option label based on document type
+            const tribunalLabel = document.getElementById('tribunal-price-label');
+            const tribunalDesc = document.getElementById('tribunal-desc');
+
+            if (isVisura) {
+                tribunalLabel.textContent = 'da €166';
+                tribunalDesc.textContent = '€150 + marche da bollo in base al numero pagine. Consegna il giorno successivo.';
+            } else if (isVoluminoso) {
+                tribunalLabel.textContent = '+marche';
+                tribunalDesc.textContent = 'Prezzo base + €16 marca da bollo ogni 4 facciate. Consegna il giorno successivo.';
+            } else {
+                tribunalLabel.textContent = '€86';
+                tribunalDesc.textContent = 'Documenti standard (max 2-3 pagine). Marca da bollo inclusa. Consegna il giorno successivo.';
+            }
 
             if (signatureType === 'tribunal') {
                 document.getElementById('signature-feature').textContent = 'Giuramento in Tribunale';
                 document.getElementById('delivery-feature').textContent = 'Consegna il giorno successivo';
 
                 if (isVisura) {
-                    // Visura camerale: prezzo fisso €86 (marca inclusa)
+                    // Visura camerale tribunale: €150 + marche
+                    document.getElementById('tribunal-pages').classList.remove('hidden');
+                    basePrice = 150;
+                    updateTribunalPrice();
+                } else if (isVoluminoso) {
+                    // Documento voluminoso: prezzo calcolato + marche
+                    document.getElementById('tribunal-pages').classList.remove('hidden');
+                    updateTribunalPrice();
+                } else {
+                    // Documenti standard: €86 fisso (marca inclusa)
                     document.getElementById('tribunal-pages').classList.add('hidden');
                     basePrice = 86;
                     bolloPrice = 0;
-                } else {
-                    // Altri documenti: calcola marche da bollo
-                    document.getElementById('tribunal-pages').classList.remove('hidden');
-                    updateTribunalPrice();
                 }
             } else {
                 document.getElementById('tribunal-pages').classList.add('hidden');
@@ -671,6 +692,8 @@
 
                 if (isVisura) {
                     basePrice = 100; // Visura digitale €100
+                } else if (!isVoluminoso) {
+                    basePrice = 50; // Documenti standard digitali €50
                 }
             }
 
