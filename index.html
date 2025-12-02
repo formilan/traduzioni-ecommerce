@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Traduzioni Giurate Immediate - €50</title>
+    <title>Traduzioni Giurate - Ecommerce</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
@@ -20,6 +20,7 @@
         .step-pending { background: #e5e7eb; }
         .doc-type-card:hover { transform: translateY(-2px); }
         .doc-type-card.selected { border-color: #8b5cf6; background: #f5f3ff; }
+        .doc-type-card.blocked { opacity: 0.6; cursor: not-allowed; }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
@@ -49,8 +50,8 @@
             <h2 class="text-2xl font-bold mb-2">Traduzione Giurata con Firma Digitale</h2>
             <p class="text-purple-100 mb-3">Documenti standard (anagrafe, diplomi, casellario)</p>
             <div class="inline-flex items-center gap-2 bg-white/20 rounded-full px-6 py-3">
-                <span class="text-3xl font-bold">€50</span>
-                <span class="text-sm opacity-90">prezzo fisso • consegna immediata</span>
+                <span class="text-3xl font-bold">da €50</span>
+                <span class="text-sm opacity-90">consegna immediata via email</span>
             </div>
         </div>
     </div>
@@ -74,55 +75,92 @@
             </div>
         </div>
 
-        <!-- Step 1: Document Type & Upload -->
+        <!-- Step 1: Document Type & Country -->
         <div id="step1" class="bg-white rounded-2xl shadow-lg p-6 mb-6">
             <h2 class="text-xl font-bold text-gray-900 mb-4">
                 <i class="fas fa-file-alt text-purple-600 mr-2"></i>
-                Seleziona tipo documento
+                Seleziona tipo documento e paese
             </h2>
 
-            <!-- Document Types -->
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
-                <button onclick="selectDocType('anagrafe')" class="doc-type-card p-4 border-2 border-gray-200 rounded-xl text-center transition-all cursor-pointer" data-type="anagrafe">
-                    <i class="fas fa-user-circle text-2xl text-blue-500 mb-2"></i>
-                    <p class="font-medium text-sm">Anagrafe</p>
-                    <p class="text-xs text-gray-500">Nascita, residenza, etc.</p>
-                </button>
-                <button onclick="selectDocType('diploma')" class="doc-type-card p-4 border-2 border-gray-200 rounded-xl text-center transition-all cursor-pointer" data-type="diploma">
-                    <i class="fas fa-graduation-cap text-2xl text-purple-500 mb-2"></i>
-                    <p class="font-medium text-sm">Diploma/Laurea</p>
-                    <p class="text-xs text-gray-500">Titoli di studio</p>
-                </button>
-                <button onclick="selectDocType('casellario')" class="doc-type-card p-4 border-2 border-gray-200 rounded-xl text-center transition-all cursor-pointer" data-type="casellario">
-                    <i class="fas fa-gavel text-2xl text-red-500 mb-2"></i>
-                    <p class="font-medium text-sm">Casellario</p>
-                    <p class="text-xs text-gray-500">Certificato penale</p>
-                </button>
-                <button onclick="selectDocType('venezuela')" class="doc-type-card p-4 border-2 border-orange-200 rounded-xl text-center transition-all cursor-pointer bg-orange-50" data-type="venezuela">
-                    <i class="fas fa-flag text-2xl text-orange-500 mb-2"></i>
-                    <p class="font-medium text-sm">Venezuela</p>
-                    <p class="text-xs text-orange-600">~5-6 pagine • prezzo variabile</p>
-                </button>
-                <button onclick="selectDocType('filippine')" class="doc-type-card p-4 border-2 border-orange-200 rounded-xl text-center transition-all cursor-pointer bg-orange-50" data-type="filippine">
-                    <i class="fas fa-flag text-2xl text-orange-500 mb-2"></i>
-                    <p class="font-medium text-sm">Filippine</p>
-                    <p class="text-xs text-orange-600">Spesso illeggibili • preventivo</p>
-                </button>
-                <button onclick="selectDocType('altro')" class="doc-type-card p-4 border-2 border-gray-200 rounded-xl text-center transition-all cursor-pointer" data-type="altro">
-                    <i class="fas fa-file-invoice text-2xl text-gray-500 mb-2"></i>
-                    <p class="font-medium text-sm">Altro</p>
-                    <p class="text-xs text-gray-500">Altri documenti</p>
-                </button>
+            <!-- Country Selection -->
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Paese di emissione del documento</label>
+                <select id="country-select" onchange="updateCountrySelection()" title="Paese di emissione" class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:border-purple-500 focus:outline-none">
+                    <option value="">-- Seleziona paese --</option>
+                    <option value="other">Altro paese</option>
+                    <option value="albania">Albania</option>
+                    <option value="argentina">Argentina</option>
+                    <option value="bangladesh">Bangladesh</option>
+                    <option value="brasile">Brasile</option>
+                    <option value="cina">Cina</option>
+                    <option value="colombia">Colombia</option>
+                    <option value="ecuador">Ecuador</option>
+                    <option value="egitto">Egitto</option>
+                    <option value="filippine">Filippine</option>
+                    <option value="francia">Francia</option>
+                    <option value="germania">Germania</option>
+                    <option value="india">India</option>
+                    <option value="marocco">Marocco</option>
+                    <option value="messico">Messico</option>
+                    <option value="moldavia">Moldavia</option>
+                    <option value="nigeria">Nigeria</option>
+                    <option value="pakistan">Pakistan</option>
+                    <option value="peru">Perù</option>
+                    <option value="polonia">Polonia</option>
+                    <option value="regno-unito">Regno Unito</option>
+                    <option value="romania">Romania</option>
+                    <option value="russia">Russia</option>
+                    <option value="senegal">Senegal</option>
+                    <option value="spagna">Spagna</option>
+                    <option value="sri-lanka">Sri Lanka</option>
+                    <option value="tunisia">Tunisia</option>
+                    <option value="turchia">Turchia</option>
+                    <option value="ucraina">Ucraina</option>
+                    <option value="usa">USA</option>
+                    <option value="venezuela">Venezuela</option>
+                </select>
             </div>
 
-            <!-- Special Cases Warning -->
-            <div id="special-warning" class="hidden mb-6 p-4 bg-orange-50 border border-orange-200 rounded-xl">
+            <!-- Document Types -->
+            <div id="doc-types-section" class="hidden">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Tipo di documento</label>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
+                    <button onclick="selectDocType('anagrafe')" class="doc-type-card p-4 border-2 border-gray-200 rounded-xl text-center transition-all cursor-pointer" data-type="anagrafe">
+                        <i class="fas fa-user-circle text-2xl text-blue-500 mb-2"></i>
+                        <p class="font-medium text-sm">Anagrafe</p>
+                        <p class="text-xs text-gray-500">Nascita, residenza, etc.</p>
+                    </button>
+                    <button onclick="selectDocType('diploma')" class="doc-type-card p-4 border-2 border-gray-200 rounded-xl text-center transition-all cursor-pointer" data-type="diploma">
+                        <i class="fas fa-graduation-cap text-2xl text-purple-500 mb-2"></i>
+                        <p class="font-medium text-sm">Diploma/Laurea</p>
+                        <p class="text-xs text-gray-500">Titoli di studio</p>
+                    </button>
+                    <button onclick="selectDocType('casellario')" class="doc-type-card p-4 border-2 border-gray-200 rounded-xl text-center transition-all cursor-pointer" data-type="casellario">
+                        <i class="fas fa-gavel text-2xl text-red-500 mb-2"></i>
+                        <p class="font-medium text-sm">Casellario</p>
+                        <p class="text-xs text-gray-500">Certificato penale</p>
+                    </button>
+                    <button onclick="selectDocType('voluminoso')" class="doc-type-card p-4 border-2 border-gray-200 rounded-xl text-center transition-all cursor-pointer" data-type="voluminoso">
+                        <i class="fas fa-book text-2xl text-amber-500 mb-2"></i>
+                        <p class="font-medium text-sm">Documento lungo</p>
+                        <p class="text-xs text-gray-500">Contratti, atti, etc.</p>
+                    </button>
+                    <button onclick="selectDocType('altro')" class="doc-type-card p-4 border-2 border-gray-200 rounded-xl text-center transition-all cursor-pointer" data-type="altro">
+                        <i class="fas fa-file-invoice text-2xl text-gray-500 mb-2"></i>
+                        <p class="font-medium text-sm">Altro</p>
+                        <p class="text-xs text-gray-500">Altri documenti brevi</p>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Country Block Warning (Venezuela/Philippines + Anagrafe) -->
+            <div id="country-block-warning" class="hidden mb-6 p-4 bg-red-50 border border-red-200 rounded-xl">
                 <div class="flex items-start gap-3">
-                    <i class="fas fa-exclamation-triangle text-orange-500 mt-1"></i>
+                    <i class="fas fa-exclamation-circle text-red-500 mt-1"></i>
                     <div>
-                        <p class="font-medium text-orange-800" id="warning-title">Documento complesso</p>
-                        <p class="text-sm text-orange-700" id="warning-text">Questo tipo di documento richiede un preventivo personalizzato.</p>
-                        <a href="https://traduzioni-giurate.net/#contact" class="inline-block mt-2 text-sm font-medium text-orange-600 hover:text-orange-700">
+                        <p class="font-medium text-red-800">Documento non disponibile online</p>
+                        <p class="text-sm text-red-700" id="block-reason"></p>
+                        <a href="https://traduzioni-giurate.net/#contact" class="inline-block mt-2 text-sm font-medium text-red-600 hover:text-red-700">
                             <i class="fas fa-envelope mr-1"></i>Richiedi preventivo gratuito
                         </a>
                     </div>
@@ -140,6 +178,33 @@
                         </div>
                     </div>
                     <span class="text-2xl font-bold text-green-600">€50</span>
+                </div>
+            </div>
+
+            <!-- Character Calculator (for voluminous documents) -->
+            <div id="character-calculator" class="hidden mb-6">
+                <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-4">
+                    <h3 class="font-semibold text-amber-900 mb-2">
+                        <i class="fas fa-calculator mr-2"></i>Calcola il costo
+                    </h3>
+                    <p class="text-sm text-amber-800 mb-4">
+                        Copia e incolla il testo del documento per calcolare il preventivo istantaneo.
+                        <br><strong>Formula:</strong> (caratteri senza spazi ÷ 1500) × €10 + €50 asseverazione
+                    </p>
+                    <textarea id="text-input" onkeyup="calculatePrice()" placeholder="Incolla qui il testo del documento..." class="w-full h-32 border-2 border-amber-200 rounded-lg p-3 focus:border-amber-500 focus:outline-none text-sm"></textarea>
+                    <div class="mt-3 flex flex-wrap items-center gap-4 text-sm">
+                        <span class="text-gray-600">Caratteri (senza spazi): <strong id="char-count">0</strong></span>
+                        <span class="text-gray-600">Cartelle (1500 car.): <strong id="page-count">0</strong></span>
+                    </div>
+                </div>
+                <div id="calculated-price" class="hidden p-4 bg-green-50 border border-green-200 rounded-xl">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="font-bold text-green-800">Prezzo calcolato</p>
+                            <p class="text-sm text-green-700" id="price-breakdown"></p>
+                        </div>
+                        <span class="text-2xl font-bold text-green-600" id="calculated-total">€50</span>
+                    </div>
                 </div>
             </div>
 
@@ -221,6 +286,46 @@
                 </div>
             </div>
 
+            <!-- Signature Type Selection -->
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 mb-3">Tipo di asseverazione</label>
+                <div class="space-y-3">
+                    <label class="flex items-start gap-3 p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-purple-300 transition-colors" id="option-digital">
+                        <input type="radio" name="signature-type" value="digital" checked onchange="updateSignatureType()" class="mt-1">
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between">
+                                <span class="font-medium">Firma Digitale <span class="text-green-600 text-xs ml-2">CONSIGLIATO</span></span>
+                                <span class="font-bold text-green-600">Inclusa</span>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-1">Validità legale in Italia e UE. Consegna immediata via email.</p>
+                        </div>
+                    </label>
+                    <label class="flex items-start gap-3 p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-purple-300 transition-colors" id="option-tribunal">
+                        <input type="radio" name="signature-type" value="tribunal" onchange="updateSignatureType()" class="mt-1">
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between">
+                                <span class="font-medium">Giuramento in Tribunale</span>
+                                <span class="font-bold text-amber-600" id="tribunal-price">+€16/4 facciate</span>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-1">Marca da bollo da €16 ogni 4 facciate. Consegna il giorno successivo.</p>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Pages input for tribunal -->
+            <div id="tribunal-pages" class="hidden mb-6 p-4 bg-amber-50 border border-amber-200 rounded-xl">
+                <label class="block text-sm font-medium text-amber-800 mb-2">
+                    <i class="fas fa-file-alt mr-1"></i>Numero di facciate totali (originale + traduzione)
+                </label>
+                <input type="number" id="pages-count" min="1" value="2" onchange="updateTribunalPrice()" title="Numero facciate" placeholder="2" class="w-32 border-2 border-amber-200 rounded-lg px-4 py-2 focus:border-amber-500 focus:outline-none">
+                <p class="text-xs text-amber-700 mt-2">Ogni 4 facciate = 1 marca da bollo da €16</p>
+                <div class="mt-3 text-sm">
+                    <span class="text-amber-800">Marche da bollo necessarie: <strong id="bollo-count">1</strong></span>
+                    <span class="text-amber-800 ml-4">Costo bolli: <strong id="bollo-cost">€16</strong></span>
+                </div>
+            </div>
+
             <!-- Included Features -->
             <div class="bg-purple-50 rounded-xl p-4 mb-6">
                 <h3 class="font-semibold text-purple-900 mb-3">Incluso nel prezzo:</h3>
@@ -231,11 +336,11 @@
                     </div>
                     <div class="flex items-center gap-2 text-purple-800">
                         <i class="fas fa-check text-green-500"></i>
-                        <span>Firma digitale qualificata</span>
+                        <span id="signature-feature">Firma digitale qualificata</span>
                     </div>
                     <div class="flex items-center gap-2 text-purple-800">
                         <i class="fas fa-check text-green-500"></i>
-                        <span>Consegna via email immediata</span>
+                        <span id="delivery-feature">Consegna via email immediata</span>
                     </div>
                     <div class="flex items-center gap-2 text-purple-800">
                         <i class="fas fa-check text-green-500"></i>
@@ -253,6 +358,7 @@
                     </div>
                     <span class="text-3xl font-bold text-green-600" id="price-total">€50</span>
                 </div>
+                <div id="price-details" class="hidden mt-3 pt-3 border-t border-green-200 text-sm text-gray-600"></div>
             </div>
 
             <div class="flex gap-4">
@@ -312,7 +418,7 @@
                     <i class="fas fa-arrow-left mr-2"></i>Indietro
                 </button>
                 <button onclick="processPayment()" id="pay-button" class="flex-1 bg-gradient-to-r from-green-500 to-green-600 text-white py-4 rounded-xl font-bold text-lg hover:opacity-90 transition-opacity">
-                    <i class="fas fa-lock mr-2"></i>Paga €50
+                    <i class="fas fa-lock mr-2"></i>Paga <span id="pay-amount">€50</span>
                 </button>
             </div>
 
@@ -329,14 +435,14 @@
             </div>
             <h2 class="text-2xl font-bold text-gray-900 mb-2">Pagamento completato!</h2>
             <p class="text-gray-600 mb-2">La traduzione è in elaborazione.</p>
-            <p class="text-sm text-gray-500 mb-6">Riceverai il documento tradotto all'indirizzo email indicato entro pochi minuti.</p>
+            <p class="text-sm text-gray-500 mb-6" id="delivery-message">Riceverai il documento tradotto all'indirizzo email indicato entro pochi minuti.</p>
             <div class="bg-gray-50 rounded-lg p-4 mb-6">
                 <p class="text-sm text-gray-500">Numero ordine</p>
                 <p class="text-xl font-mono font-bold text-purple-600" id="order-number">TRD-XXXXX</p>
             </div>
             <div class="bg-blue-50 rounded-lg p-4 mb-6 text-left">
                 <p class="text-sm font-medium text-blue-800 mb-2"><i class="fas fa-info-circle mr-2"></i>Cosa succede ora?</p>
-                <ol class="text-sm text-blue-700 space-y-1 list-decimal list-inside">
+                <ol class="text-sm text-blue-700 space-y-1 list-decimal list-inside" id="success-steps">
                     <li>Il documento viene tradotto dall'AI</li>
                     <li>Un traduttore verifica e appone la firma digitale</li>
                     <li>Ricevi il PDF firmato via email</li>
@@ -358,22 +464,83 @@
 
     <script>
         // State
+        let selectedCountry = null;
         let selectedDocType = null;
         let uploadedFile = null;
         let currentStep = 1;
-        let currentPrice = 50;
+        let basePrice = 50;
+        let translationPrice = 0;
+        let bolloPrice = 0;
+        let signatureType = 'digital';
+
+        // Blocked combinations
+        const BLOCKED_COMBINATIONS = {
+            'venezuela': ['anagrafe'],
+            'filippine': ['anagrafe']
+        };
+
+        const BLOCK_REASONS = {
+            'venezuela': 'I certificati anagrafici venezuelani hanno tipicamente 5-6 pagine e richiedono un preventivo personalizzato.',
+            'filippine': 'I documenti anagrafici filippini sono spesso di difficile lettura e richiedono una valutazione specifica.'
+        };
 
         // Document types configuration
         const DOC_TYPES = {
             anagrafe: { name: 'Certificato anagrafe', price: 50, standard: true },
             diploma: { name: 'Diploma/Laurea', price: 50, standard: true },
             casellario: { name: 'Casellario giudiziale', price: 50, standard: true },
-            venezuela: { name: 'Documento Venezuela', price: null, standard: false, warning: 'I certificati venezuelani hanno tipicamente 5-6 pagine e richiedono un preventivo personalizzato.' },
-            filippine: { name: 'Documento Filippine', price: null, standard: false, warning: 'I documenti filippini sono spesso di difficile lettura e richiedono una valutazione specifica.' },
+            voluminoso: { name: 'Documento lungo', price: null, standard: false, calculator: true },
             altro: { name: 'Altro documento', price: 50, standard: true }
         };
 
+        function updateCountrySelection() {
+            selectedCountry = document.getElementById('country-select').value;
+
+            // Reset state
+            selectedDocType = null;
+            document.querySelectorAll('.doc-type-card').forEach(card => {
+                card.classList.remove('selected', 'blocked');
+            });
+            document.getElementById('country-block-warning').classList.add('hidden');
+            document.getElementById('standard-price').classList.add('hidden');
+            document.getElementById('character-calculator').classList.add('hidden');
+            document.getElementById('upload-section').classList.add('hidden');
+            document.getElementById('btn-step1').classList.add('hidden');
+
+            if (selectedCountry) {
+                document.getElementById('doc-types-section').classList.remove('hidden');
+
+                // Update blocked cards visual
+                if (BLOCKED_COMBINATIONS[selectedCountry]) {
+                    BLOCKED_COMBINATIONS[selectedCountry].forEach(docType => {
+                        const card = document.querySelector(`[data-type="${docType}"]`);
+                        if (card) {
+                            card.classList.add('blocked');
+                        }
+                    });
+                }
+            } else {
+                document.getElementById('doc-types-section').classList.add('hidden');
+            }
+        }
+
         function selectDocType(type) {
+            // Check if blocked
+            if (BLOCKED_COMBINATIONS[selectedCountry]?.includes(type)) {
+                document.getElementById('country-block-warning').classList.remove('hidden');
+                document.getElementById('block-reason').textContent = BLOCK_REASONS[selectedCountry];
+                document.getElementById('standard-price').classList.add('hidden');
+                document.getElementById('character-calculator').classList.add('hidden');
+                document.getElementById('upload-section').classList.add('hidden');
+                document.getElementById('btn-step1').classList.add('hidden');
+
+                // Remove selection from all
+                document.querySelectorAll('.doc-type-card').forEach(card => {
+                    card.classList.remove('selected');
+                });
+                return;
+            }
+
             selectedDocType = type;
             const config = DOC_TYPES[type];
 
@@ -383,32 +550,99 @@
             });
             document.querySelector(`[data-type="${type}"]`).classList.add('selected');
 
-            // Show/hide warnings and prices
-            const warningEl = document.getElementById('special-warning');
-            const priceEl = document.getElementById('standard-price');
-            const uploadEl = document.getElementById('upload-section');
-            const btnEl = document.getElementById('btn-step1');
+            // Hide warning
+            document.getElementById('country-block-warning').classList.add('hidden');
 
-            if (!config.standard) {
-                // Special case - show warning, hide upload
-                warningEl.classList.remove('hidden');
-                document.getElementById('warning-title').textContent = config.name;
-                document.getElementById('warning-text').textContent = config.warning;
-                priceEl.classList.add('hidden');
-                uploadEl.classList.add('hidden');
-                btnEl.classList.add('hidden');
+            if (config.calculator) {
+                // Show calculator for voluminous documents
+                document.getElementById('standard-price').classList.add('hidden');
+                document.getElementById('character-calculator').classList.remove('hidden');
+                document.getElementById('upload-section').classList.remove('hidden');
+                translationPrice = 0;
+                calculatePrice();
             } else {
-                // Standard case - show price and upload
-                warningEl.classList.add('hidden');
-                priceEl.classList.remove('hidden');
-                uploadEl.classList.remove('hidden');
-                currentPrice = config.price;
+                // Standard pricing
+                document.getElementById('standard-price').classList.remove('hidden');
+                document.getElementById('character-calculator').classList.add('hidden');
+                document.getElementById('upload-section').classList.remove('hidden');
+                basePrice = config.price;
+                translationPrice = 0;
+            }
 
-                // Enable button if file uploaded
-                if (uploadedFile) {
-                    btnEl.classList.remove('hidden');
-                    btnEl.disabled = false;
-                }
+            // Enable button if file uploaded
+            if (uploadedFile) {
+                const btn = document.getElementById('btn-step1');
+                btn.classList.remove('hidden');
+                btn.disabled = false;
+            }
+        }
+
+        function calculatePrice() {
+            const text = document.getElementById('text-input').value;
+            const charsNoSpaces = text.replace(/\s/g, '').length;
+            const pages = Math.max(1, Math.ceil(charsNoSpaces / 1500));
+
+            document.getElementById('char-count').textContent = charsNoSpaces.toLocaleString();
+            document.getElementById('page-count').textContent = pages;
+
+            if (charsNoSpaces > 0) {
+                translationPrice = pages * 10;
+                const total = translationPrice + 50; // +50 for asseverazione
+
+                document.getElementById('calculated-price').classList.remove('hidden');
+                document.getElementById('price-breakdown').textContent =
+                    `${pages} cartelle × €10 = €${translationPrice} + €50 asseverazione`;
+                document.getElementById('calculated-total').textContent = `€${total}`;
+                basePrice = total;
+            } else {
+                document.getElementById('calculated-price').classList.add('hidden');
+                translationPrice = 0;
+                basePrice = 50;
+            }
+        }
+
+        function updateSignatureType() {
+            signatureType = document.querySelector('input[name="signature-type"]:checked').value;
+
+            if (signatureType === 'tribunal') {
+                document.getElementById('tribunal-pages').classList.remove('hidden');
+                document.getElementById('signature-feature').textContent = 'Giuramento in Tribunale';
+                document.getElementById('delivery-feature').textContent = 'Consegna il giorno successivo';
+                updateTribunalPrice();
+            } else {
+                document.getElementById('tribunal-pages').classList.add('hidden');
+                document.getElementById('signature-feature').textContent = 'Firma digitale qualificata';
+                document.getElementById('delivery-feature').textContent = 'Consegna via email immediata';
+                bolloPrice = 0;
+            }
+
+            updateTotalPrice();
+        }
+
+        function updateTribunalPrice() {
+            const pages = parseInt(document.getElementById('pages-count').value) || 2;
+            const bolloCount = Math.ceil(pages / 4);
+            bolloPrice = bolloCount * 16;
+
+            document.getElementById('bollo-count').textContent = bolloCount;
+            document.getElementById('bollo-cost').textContent = `€${bolloPrice}`;
+
+            updateTotalPrice();
+        }
+
+        function updateTotalPrice() {
+            const total = basePrice + bolloPrice;
+            document.getElementById('price-total').textContent = `€${total}`;
+
+            const detailsEl = document.getElementById('price-details');
+            if (bolloPrice > 0) {
+                detailsEl.classList.remove('hidden');
+                detailsEl.innerHTML = `
+                    <div class="flex justify-between"><span>Traduzione + asseverazione</span><span>€${basePrice}</span></div>
+                    <div class="flex justify-between"><span>Marche da bollo</span><span>€${bolloPrice}</span></div>
+                `;
+            } else {
+                detailsEl.classList.add('hidden');
             }
         }
 
@@ -438,7 +672,7 @@
                 icon.className = 'fas fa-file-image text-blue-500 text-2xl';
             }
 
-            if (selectedDocType && DOC_TYPES[selectedDocType].standard) {
+            if (selectedDocType && !BLOCKED_COMBINATIONS[selectedCountry]?.includes(selectedDocType)) {
                 btn.classList.remove('hidden');
                 btn.disabled = false;
             }
@@ -493,6 +727,7 @@
             // Update summaries
             if (step === 2) {
                 document.getElementById('summary-doc-type').textContent = DOC_TYPES[selectedDocType].name;
+                updateTotalPrice();
             }
 
             if (step === 3) {
@@ -505,8 +740,11 @@
         function updateOrderSummary() {
             const sourceLang = document.getElementById('source-lang').selectedOptions[0].text;
             const targetLang = document.getElementById('target-lang').selectedOptions[0].text;
+            const total = basePrice + bolloPrice;
+            const signatureText = signatureType === 'tribunal' ? 'Giuramento in Tribunale' : 'Firma digitale';
+            const deliveryText = signatureType === 'tribunal' ? 'Il giorno successivo' : 'Immediata via email';
 
-            document.getElementById('order-summary').innerHTML = `
+            let summaryHTML = `
                 <div class="flex justify-between">
                     <span class="text-gray-600">Documento</span>
                     <span>${DOC_TYPES[selectedDocType].name}</span>
@@ -520,14 +758,29 @@
                     <span>${sourceLang} → ${targetLang}</span>
                 </div>
                 <div class="flex justify-between">
-                    <span class="text-gray-600">Tipo</span>
-                    <span class="text-purple-600 font-medium">Giurata con firma digitale</span>
+                    <span class="text-gray-600">Asseverazione</span>
+                    <span class="text-purple-600 font-medium">${signatureText}</span>
                 </div>
                 <div class="flex justify-between">
                     <span class="text-gray-600">Consegna</span>
-                    <span class="text-green-600 font-medium">Immediata via email</span>
+                    <span class="text-green-600 font-medium">${deliveryText}</span>
                 </div>
             `;
+
+            if (bolloPrice > 0) {
+                const pages = parseInt(document.getElementById('pages-count').value) || 2;
+                const bolloCount = Math.ceil(pages / 4);
+                summaryHTML += `
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Marche da bollo</span>
+                        <span>${bolloCount} × €16 = €${bolloPrice}</span>
+                    </div>
+                `;
+            }
+
+            document.getElementById('order-summary').innerHTML = summaryHTML;
+            document.getElementById('final-total').textContent = `€${total}`;
+            document.getElementById('pay-amount').textContent = `€${total}`;
         }
 
         function processPayment() {
@@ -553,6 +806,18 @@
                 const orderNum = 'TRD-' + Date.now().toString(36).toUpperCase();
                 document.getElementById('order-number').textContent = orderNum;
 
+                // Update success message based on signature type
+                if (signatureType === 'tribunal') {
+                    document.getElementById('delivery-message').textContent =
+                        'Riceverai il documento tradotto e giurato in Tribunale il giorno successivo.';
+                    document.getElementById('success-steps').innerHTML = `
+                        <li>Il documento viene tradotto dall'AI</li>
+                        <li>Un traduttore verifica la traduzione</li>
+                        <li>Giuramento in Tribunale con marca da bollo</li>
+                        <li>Consegna il giorno successivo via email/corriere</li>
+                    `;
+                }
+
                 document.getElementById('step3').classList.add('hidden');
                 document.getElementById('success').classList.remove('hidden');
 
@@ -560,11 +825,15 @@
                 console.log('Order:', {
                     orderNumber: orderNum,
                     customer: { name, email },
+                    country: selectedCountry,
                     file: uploadedFile.name,
                     docType: selectedDocType,
                     sourceLang: document.getElementById('source-lang').value,
                     targetLang: document.getElementById('target-lang').value,
-                    price: currentPrice
+                    signatureType: signatureType,
+                    basePrice: basePrice,
+                    bolloPrice: bolloPrice,
+                    totalPrice: basePrice + bolloPrice
                 });
             }, 2000);
         }
