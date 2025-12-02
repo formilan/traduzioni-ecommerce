@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Traduzioni Giurate - E-Commerce Demo</title>
+    <title>Traduzioni Giurate Immediate - €50</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
@@ -18,6 +18,8 @@
         .step-active { background: linear-gradient(135deg, #8b5cf6, #6366f1); }
         .step-completed { background: #22c55e; }
         .step-pending { background: #e5e7eb; }
+        .doc-type-card:hover { transform: translateY(-2px); }
+        .doc-type-card.selected { border-color: #8b5cf6; background: #f5f3ff; }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
@@ -30,15 +32,31 @@
                 </div>
                 <div>
                     <h1 class="font-bold text-gray-900">Traduzioni Giurate</h1>
-                    <p class="text-xs text-gray-500">E-Commerce Demo</p>
+                    <p class="text-xs text-gray-500">Consegna Immediata</p>
                 </div>
             </div>
-            <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">PROTOTIPO</span>
+            <div class="flex items-center gap-2">
+                <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">
+                    <i class="fas fa-bolt mr-1"></i>EVASIONE IMMEDIATA
+                </span>
+            </div>
         </div>
     </header>
 
-    <!-- Progress Steps -->
+    <!-- Hero Banner -->
+    <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white py-6">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h2 class="text-2xl font-bold mb-2">Traduzione Giurata con Firma Digitale</h2>
+            <p class="text-purple-100 mb-3">Documenti standard (anagrafe, diplomi, casellario)</p>
+            <div class="inline-flex items-center gap-2 bg-white/20 rounded-full px-6 py-3">
+                <span class="text-3xl font-bold">€50</span>
+                <span class="text-sm opacity-90">prezzo fisso • consegna immediata</span>
+            </div>
+        </div>
+    </div>
+
     <div class="max-w-4xl mx-auto px-4 py-6">
+        <!-- Progress Steps -->
         <div class="flex items-center justify-between mb-8">
             <div class="flex items-center gap-2" id="step1-indicator">
                 <div class="w-8 h-8 rounded-full step-active flex items-center justify-center text-white text-sm font-bold">1</div>
@@ -47,7 +65,7 @@
             <div class="flex-1 h-1 bg-gray-200 mx-2"><div class="h-full bg-purple-500 transition-all duration-500" id="progress1" style="width: 0%"></div></div>
             <div class="flex items-center gap-2" id="step2-indicator">
                 <div class="w-8 h-8 rounded-full step-pending flex items-center justify-center text-gray-500 text-sm font-bold">2</div>
-                <span class="text-sm font-medium text-gray-400 hidden sm:inline">Opzioni</span>
+                <span class="text-sm font-medium text-gray-400 hidden sm:inline">Dettagli</span>
             </div>
             <div class="flex-1 h-1 bg-gray-200 mx-2"><div class="h-full bg-purple-500 transition-all duration-500" id="progress2" style="width: 0%"></div></div>
             <div class="flex items-center gap-2" id="step3-indicator">
@@ -56,48 +74,107 @@
             </div>
         </div>
 
-        <!-- Step 1: Document Upload -->
+        <!-- Step 1: Document Type & Upload -->
         <div id="step1" class="bg-white rounded-2xl shadow-lg p-6 mb-6">
             <h2 class="text-xl font-bold text-gray-900 mb-4">
-                <i class="fas fa-file-upload text-purple-600 mr-2"></i>
-                Carica il tuo documento
+                <i class="fas fa-file-alt text-purple-600 mr-2"></i>
+                Seleziona tipo documento
             </h2>
 
-            <!-- Scanner Area -->
-            <div id="upload-area" class="scanner-frame rounded-xl p-8 text-center cursor-pointer hover:bg-green-50 transition-colors">
-                <div class="mb-4">
-                    <i class="fas fa-camera text-5xl text-green-500"></i>
-                </div>
-                <p class="text-lg font-semibold text-gray-700 mb-2">Scansiona o carica documento</p>
-                <p class="text-sm text-gray-500 mb-4">Supporta: JPG, PNG, PDF (max 10MB)</p>
-                <input type="file" id="file-input" accept="image/*,.pdf" class="hidden" multiple>
-                <button onclick="document.getElementById('file-input').click()" class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
-                    <i class="fas fa-plus mr-2"></i>Seleziona file
+            <!-- Document Types -->
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
+                <button onclick="selectDocType('anagrafe')" class="doc-type-card p-4 border-2 border-gray-200 rounded-xl text-center transition-all cursor-pointer" data-type="anagrafe">
+                    <i class="fas fa-user-circle text-2xl text-blue-500 mb-2"></i>
+                    <p class="font-medium text-sm">Anagrafe</p>
+                    <p class="text-xs text-gray-500">Nascita, residenza, etc.</p>
+                </button>
+                <button onclick="selectDocType('diploma')" class="doc-type-card p-4 border-2 border-gray-200 rounded-xl text-center transition-all cursor-pointer" data-type="diploma">
+                    <i class="fas fa-graduation-cap text-2xl text-purple-500 mb-2"></i>
+                    <p class="font-medium text-sm">Diploma/Laurea</p>
+                    <p class="text-xs text-gray-500">Titoli di studio</p>
+                </button>
+                <button onclick="selectDocType('casellario')" class="doc-type-card p-4 border-2 border-gray-200 rounded-xl text-center transition-all cursor-pointer" data-type="casellario">
+                    <i class="fas fa-gavel text-2xl text-red-500 mb-2"></i>
+                    <p class="font-medium text-sm">Casellario</p>
+                    <p class="text-xs text-gray-500">Certificato penale</p>
+                </button>
+                <button onclick="selectDocType('venezuela')" class="doc-type-card p-4 border-2 border-orange-200 rounded-xl text-center transition-all cursor-pointer bg-orange-50" data-type="venezuela">
+                    <i class="fas fa-flag text-2xl text-orange-500 mb-2"></i>
+                    <p class="font-medium text-sm">Venezuela</p>
+                    <p class="text-xs text-orange-600">~5-6 pagine • prezzo variabile</p>
+                </button>
+                <button onclick="selectDocType('filippine')" class="doc-type-card p-4 border-2 border-orange-200 rounded-xl text-center transition-all cursor-pointer bg-orange-50" data-type="filippine">
+                    <i class="fas fa-flag text-2xl text-orange-500 mb-2"></i>
+                    <p class="font-medium text-sm">Filippine</p>
+                    <p class="text-xs text-orange-600">Spesso illeggibili • preventivo</p>
+                </button>
+                <button onclick="selectDocType('altro')" class="doc-type-card p-4 border-2 border-gray-200 rounded-xl text-center transition-all cursor-pointer" data-type="altro">
+                    <i class="fas fa-file-invoice text-2xl text-gray-500 mb-2"></i>
+                    <p class="font-medium text-sm">Altro</p>
+                    <p class="text-xs text-gray-500">Altri documenti</p>
                 </button>
             </div>
 
-            <!-- Uploaded Files Preview -->
-            <div id="files-preview" class="hidden mt-6">
-                <h3 class="font-semibold text-gray-700 mb-3">Documenti caricati:</h3>
-                <div id="files-list" class="space-y-2"></div>
-                <div class="mt-4 flex gap-3">
-                    <button onclick="document.getElementById('file-input').click()" class="text-purple-600 hover:text-purple-700 font-medium">
-                        <i class="fas fa-plus mr-1"></i>Aggiungi altro
-                    </button>
+            <!-- Special Cases Warning -->
+            <div id="special-warning" class="hidden mb-6 p-4 bg-orange-50 border border-orange-200 rounded-xl">
+                <div class="flex items-start gap-3">
+                    <i class="fas fa-exclamation-triangle text-orange-500 mt-1"></i>
+                    <div>
+                        <p class="font-medium text-orange-800" id="warning-title">Documento complesso</p>
+                        <p class="text-sm text-orange-700" id="warning-text">Questo tipo di documento richiede un preventivo personalizzato.</p>
+                        <a href="https://traduzioni-giurate.net/#contact" class="inline-block mt-2 text-sm font-medium text-orange-600 hover:text-orange-700">
+                            <i class="fas fa-envelope mr-1"></i>Richiedi preventivo gratuito
+                        </a>
+                    </div>
                 </div>
             </div>
 
-            <!-- Page Count -->
-            <div id="page-count-section" class="hidden mt-6 p-4 bg-gray-50 rounded-lg">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Numero totale pagine da tradurre:</label>
-                <div class="flex items-center gap-4">
-                    <button onclick="adjustPages(-1)" class="w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center">
-                        <i class="fas fa-minus"></i>
+            <!-- Standard Price Box -->
+            <div id="standard-price" class="hidden mb-6 p-4 bg-green-50 border border-green-200 rounded-xl">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-check-circle text-green-500 text-2xl"></i>
+                        <div>
+                            <p class="font-bold text-green-800">Prezzo fisso €50</p>
+                            <p class="text-sm text-green-700">Traduzione giurata con firma digitale • Consegna immediata</p>
+                        </div>
+                    </div>
+                    <span class="text-2xl font-bold text-green-600">€50</span>
+                </div>
+            </div>
+
+            <!-- Upload Area -->
+            <div id="upload-section" class="hidden">
+                <h3 class="font-semibold text-gray-700 mb-3">
+                    <i class="fas fa-upload text-purple-600 mr-2"></i>
+                    Carica il documento
+                </h3>
+                <div id="upload-area" class="scanner-frame rounded-xl p-6 text-center cursor-pointer hover:bg-green-50 transition-colors">
+                    <div class="mb-3">
+                        <i class="fas fa-cloud-upload-alt text-4xl text-green-500"></i>
+                    </div>
+                    <p class="font-semibold text-gray-700 mb-1">Trascina o clicca per caricare</p>
+                    <p class="text-sm text-gray-500 mb-3">JPG, PNG, PDF (max 10MB)</p>
+                    <input type="file" id="file-input" accept="image/*,.pdf" class="hidden">
+                    <button onclick="document.getElementById('file-input').click()" class="bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded-lg font-medium transition-colors text-sm">
+                        <i class="fas fa-plus mr-2"></i>Seleziona file
                     </button>
-                    <input type="number" id="page-count" value="1" min="1" max="100" class="w-20 text-center text-2xl font-bold border-2 border-purple-300 rounded-lg py-2">
-                    <button onclick="adjustPages(1)" class="w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center">
-                        <i class="fas fa-plus"></i>
-                    </button>
+                </div>
+
+                <!-- Uploaded File Preview -->
+                <div id="file-preview" class="hidden mt-4 p-4 bg-gray-50 rounded-xl">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-file-pdf text-red-500 text-2xl" id="file-icon"></i>
+                            <div>
+                                <p class="font-medium text-gray-900" id="file-name">documento.pdf</p>
+                                <p class="text-xs text-gray-500" id="file-size">1.2 MB</p>
+                            </div>
+                        </div>
+                        <button onclick="removeFile()" class="text-red-500 hover:text-red-700 p-2">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -106,11 +183,11 @@
             </button>
         </div>
 
-        <!-- Step 2: Options -->
+        <!-- Step 2: Details -->
         <div id="step2" class="hidden bg-white rounded-2xl shadow-lg p-6 mb-6">
             <h2 class="text-xl font-bold text-gray-900 mb-4">
                 <i class="fas fa-cog text-purple-600 mr-2"></i>
-                Configura la traduzione
+                Dettagli traduzione
             </h2>
 
             <!-- Language Selection -->
@@ -119,87 +196,62 @@
                     <label class="block text-sm font-medium text-gray-700 mb-2">Lingua originale</label>
                     <select id="source-lang" class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:border-purple-500 focus:outline-none">
                         <option value="auto">Rilevamento automatico</option>
-                        <option value="it">Italiano</option>
+                        <option value="es">Spagnolo</option>
                         <option value="en">Inglese</option>
                         <option value="de">Tedesco</option>
                         <option value="fr">Francese</option>
-                        <option value="es">Spagnolo</option>
                         <option value="pt">Portoghese</option>
                         <option value="ro">Romeno</option>
                         <option value="ru">Russo</option>
-                        <option value="zh">Cinese</option>
+                        <option value="uk">Ucraino</option>
                         <option value="ar">Arabo</option>
-                        <option value="ja">Giapponese</option>
+                        <option value="zh">Cinese</option>
+                        <option value="tl">Tagalog (Filippino)</option>
                     </select>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Traduci in</label>
-                    <select id="target-lang" onchange="updatePrice()" class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:border-purple-500 focus:outline-none">
-                        <option value="it">Italiano</option>
-                        <option value="en" selected>Inglese</option>
+                    <select id="target-lang" class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:border-purple-500 focus:outline-none">
+                        <option value="it" selected>Italiano</option>
+                        <option value="en">Inglese</option>
                         <option value="de">Tedesco</option>
                         <option value="fr">Francese</option>
                         <option value="es">Spagnolo</option>
-                        <option value="pt">Portoghese</option>
-                        <option value="ro">Romeno</option>
-                        <option value="ru">Russo (+10%)</option>
-                        <option value="zh">Cinese (+30%)</option>
-                        <option value="ar">Arabo (+20%)</option>
-                        <option value="ja">Giapponese (+30%)</option>
                     </select>
                 </div>
             </div>
 
-            <!-- Options -->
-            <div class="space-y-4 mb-6">
-                <label class="flex items-center justify-between p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-purple-300 transition-colors">
-                    <div class="flex items-center gap-3">
-                        <input type="checkbox" id="sworn" onchange="updatePrice()" class="w-5 h-5 text-purple-600 rounded">
-                        <div>
-                            <span class="font-medium text-gray-900">Traduzione Giurata</span>
-                            <p class="text-sm text-gray-500">Con firma digitale del traduttore</p>
-                        </div>
+            <!-- Included Features -->
+            <div class="bg-purple-50 rounded-xl p-4 mb-6">
+                <h3 class="font-semibold text-purple-900 mb-3">Incluso nel prezzo:</h3>
+                <div class="grid md:grid-cols-2 gap-2 text-sm">
+                    <div class="flex items-center gap-2 text-purple-800">
+                        <i class="fas fa-check text-green-500"></i>
+                        <span>Traduzione giurata</span>
                     </div>
-                    <span class="text-purple-600 font-bold">+€25</span>
-                </label>
-
-                <label class="flex items-center justify-between p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-purple-300 transition-colors">
-                    <div class="flex items-center gap-3">
-                        <input type="checkbox" id="urgent" onchange="updatePrice()" class="w-5 h-5 text-purple-600 rounded">
-                        <div>
-                            <span class="font-medium text-gray-900">Consegna Urgente</span>
-                            <p class="text-sm text-gray-500">Entro 24 ore</p>
-                        </div>
+                    <div class="flex items-center gap-2 text-purple-800">
+                        <i class="fas fa-check text-green-500"></i>
+                        <span>Firma digitale qualificata</span>
                     </div>
-                    <span class="text-purple-600 font-bold">+50%</span>
-                </label>
+                    <div class="flex items-center gap-2 text-purple-800">
+                        <i class="fas fa-check text-green-500"></i>
+                        <span>Consegna via email immediata</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-purple-800">
+                        <i class="fas fa-check text-green-500"></i>
+                        <span>Validità legale in Italia e UE</span>
+                    </div>
+                </div>
             </div>
 
             <!-- Price Summary -->
-            <div class="bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl p-6 mb-6">
-                <h3 class="font-bold text-gray-900 mb-4">Riepilogo preventivo</h3>
-                <div class="space-y-2 text-sm">
-                    <div class="flex justify-between">
-                        <span class="text-gray-600">Base (<span id="summary-pages">1</span> pagine × €15)</span>
-                        <span id="price-base">€15.00</span>
+            <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 mb-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="font-bold text-gray-900">Totale</h3>
+                        <p class="text-sm text-gray-600" id="summary-doc-type">Documento anagrafe</p>
                     </div>
-                    <div id="price-lang-row" class="hidden flex justify-between">
-                        <span class="text-gray-600">Supplemento lingua</span>
-                        <span id="price-lang">€0.00</span>
-                    </div>
-                    <div id="price-sworn-row" class="hidden flex justify-between">
-                        <span class="text-gray-600">Traduzione giurata</span>
-                        <span>€25.00</span>
-                    </div>
-                    <div id="price-urgent-row" class="hidden flex justify-between">
-                        <span class="text-gray-600">Urgenza (+50%)</span>
-                        <span id="price-urgent">€0.00</span>
-                    </div>
-                    <hr class="my-3">
-                    <div class="flex justify-between text-lg font-bold">
-                        <span>Totale</span>
-                        <span id="price-total" class="text-purple-600">€15.00</span>
-                    </div>
+                    <span class="text-3xl font-bold text-green-600" id="price-total">€50</span>
                 </div>
             </div>
 
@@ -227,29 +279,26 @@
                     <input type="text" id="customer-name" class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:border-purple-500 focus:outline-none" placeholder="Mario Rossi">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Email *</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Email per consegna *</label>
                     <input type="email" id="customer-email" class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:border-purple-500 focus:outline-none" placeholder="mario@email.com">
                 </div>
             </div>
 
             <!-- Order Summary -->
             <div class="bg-gray-50 rounded-xl p-6 mb-6">
-                <h3 class="font-bold text-gray-900 mb-3">Il tuo ordine</h3>
-                <div class="space-y-2 text-sm" id="order-summary">
-                    <!-- Populated by JS -->
-                </div>
+                <h3 class="font-bold text-gray-900 mb-3">Riepilogo ordine</h3>
+                <div class="space-y-2 text-sm" id="order-summary"></div>
                 <hr class="my-4">
                 <div class="flex justify-between text-xl font-bold">
-                    <span>Totale da pagare</span>
-                    <span id="final-total" class="text-purple-600">€15.00</span>
+                    <span>Totale</span>
+                    <span id="final-total" class="text-green-600">€50</span>
                 </div>
             </div>
 
             <!-- Payment Methods -->
             <div class="mb-6">
                 <p class="text-sm text-gray-600 mb-3">Metodo di pagamento:</p>
-                <div class="flex gap-3 flex-wrap">
-                    <img src="https://cdn.sumup.com/images/logo/sumup-logo-small.svg" alt="SumUp" class="h-8 opacity-70">
+                <div class="flex gap-3 flex-wrap items-center">
                     <i class="fab fa-cc-visa text-3xl text-blue-600"></i>
                     <i class="fab fa-cc-mastercard text-3xl text-red-500"></i>
                     <i class="fab fa-cc-amex text-3xl text-blue-400"></i>
@@ -263,13 +312,13 @@
                     <i class="fas fa-arrow-left mr-2"></i>Indietro
                 </button>
                 <button onclick="processPayment()" id="pay-button" class="flex-1 bg-gradient-to-r from-green-500 to-green-600 text-white py-4 rounded-xl font-bold text-lg hover:opacity-90 transition-opacity">
-                    <i class="fas fa-lock mr-2"></i>Paga ora <span id="pay-amount">€15.00</span>
+                    <i class="fas fa-lock mr-2"></i>Paga €50
                 </button>
             </div>
 
             <p class="text-xs text-gray-400 text-center mt-4">
                 <i class="fas fa-shield-alt mr-1"></i>
-                Pagamento sicuro con crittografia SSL. I dati della carta non vengono salvati.
+                Pagamento sicuro con crittografia SSL • Powered by SumUp
             </p>
         </div>
 
@@ -278,11 +327,20 @@
             <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
                 <i class="fas fa-check text-4xl text-green-500"></i>
             </div>
-            <h2 class="text-2xl font-bold text-gray-900 mb-2">Ordine completato!</h2>
-            <p class="text-gray-600 mb-6">Riceverai la traduzione all'indirizzo email indicato.</p>
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">Pagamento completato!</h2>
+            <p class="text-gray-600 mb-2">La traduzione è in elaborazione.</p>
+            <p class="text-sm text-gray-500 mb-6">Riceverai il documento tradotto all'indirizzo email indicato entro pochi minuti.</p>
             <div class="bg-gray-50 rounded-lg p-4 mb-6">
                 <p class="text-sm text-gray-500">Numero ordine</p>
                 <p class="text-xl font-mono font-bold text-purple-600" id="order-number">TRD-XXXXX</p>
+            </div>
+            <div class="bg-blue-50 rounded-lg p-4 mb-6 text-left">
+                <p class="text-sm font-medium text-blue-800 mb-2"><i class="fas fa-info-circle mr-2"></i>Cosa succede ora?</p>
+                <ol class="text-sm text-blue-700 space-y-1 list-decimal list-inside">
+                    <li>Il documento viene tradotto dall'AI</li>
+                    <li>Un traduttore verifica e appone la firma digitale</li>
+                    <li>Ricevi il PDF firmato via email</li>
+                </ol>
             </div>
             <a href="/" class="inline-block bg-purple-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-purple-700 transition-colors">
                 Nuova traduzione
@@ -293,141 +351,104 @@
     <!-- Footer -->
     <footer class="bg-white border-t mt-12 py-6">
         <div class="max-w-4xl mx-auto px-4 text-center text-sm text-gray-500">
-            <p>Demo E-Commerce - <a href="https://traduzioni-giurate.net" class="text-purple-600 hover:underline">traduzioni-giurate.net</a></p>
-            <p class="mt-1">Powered by Google Cloud AI + SumUp Payments</p>
+            <p><a href="https://traduzioni-giurate.net" class="text-purple-600 hover:underline">traduzioni-giurate.net</a></p>
+            <p class="mt-1">Powered by Google Cloud AI</p>
         </div>
     </footer>
 
     <script>
         // State
-        let uploadedFiles = [];
+        let selectedDocType = null;
+        let uploadedFile = null;
         let currentStep = 1;
+        let currentPrice = 50;
 
-        // Pricing config
-        const PRICING = {
-            basePerPage: 15,
-            swornFee: 25,
-            urgentMultiplier: 1.5,
-            langMultipliers: {
-                zh: 1.3, ja: 1.3, ar: 1.2, ru: 1.1,
-                default: 1.0
-            }
+        // Document types configuration
+        const DOC_TYPES = {
+            anagrafe: { name: 'Certificato anagrafe', price: 50, standard: true },
+            diploma: { name: 'Diploma/Laurea', price: 50, standard: true },
+            casellario: { name: 'Casellario giudiziale', price: 50, standard: true },
+            venezuela: { name: 'Documento Venezuela', price: null, standard: false, warning: 'I certificati venezuelani hanno tipicamente 5-6 pagine e richiedono un preventivo personalizzato.' },
+            filippine: { name: 'Documento Filippine', price: null, standard: false, warning: 'I documenti filippini sono spesso di difficile lettura e richiedono una valutazione specifica.' },
+            altro: { name: 'Altro documento', price: 50, standard: true }
         };
+
+        function selectDocType(type) {
+            selectedDocType = type;
+            const config = DOC_TYPES[type];
+
+            // Update UI
+            document.querySelectorAll('.doc-type-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            document.querySelector(`[data-type="${type}"]`).classList.add('selected');
+
+            // Show/hide warnings and prices
+            const warningEl = document.getElementById('special-warning');
+            const priceEl = document.getElementById('standard-price');
+            const uploadEl = document.getElementById('upload-section');
+            const btnEl = document.getElementById('btn-step1');
+
+            if (!config.standard) {
+                // Special case - show warning, hide upload
+                warningEl.classList.remove('hidden');
+                document.getElementById('warning-title').textContent = config.name;
+                document.getElementById('warning-text').textContent = config.warning;
+                priceEl.classList.add('hidden');
+                uploadEl.classList.add('hidden');
+                btnEl.classList.add('hidden');
+            } else {
+                // Standard case - show price and upload
+                warningEl.classList.add('hidden');
+                priceEl.classList.remove('hidden');
+                uploadEl.classList.remove('hidden');
+                currentPrice = config.price;
+
+                // Enable button if file uploaded
+                if (uploadedFile) {
+                    btnEl.classList.remove('hidden');
+                    btnEl.disabled = false;
+                }
+            }
+        }
 
         // File upload handler
         document.getElementById('file-input').addEventListener('change', function(e) {
-            const files = Array.from(e.target.files);
-            files.forEach(file => {
-                if (!uploadedFiles.find(f => f.name === file.name)) {
-                    uploadedFiles.push(file);
-                }
-            });
-            renderFiles();
+            const file = e.target.files[0];
+            if (file) {
+                uploadedFile = file;
+                renderFile();
+            }
         });
 
-        function renderFiles() {
-            const list = document.getElementById('files-list');
-            const preview = document.getElementById('files-preview');
-            const pageSection = document.getElementById('page-count-section');
+        function renderFile() {
+            if (!uploadedFile) return;
+
+            const preview = document.getElementById('file-preview');
             const btn = document.getElementById('btn-step1');
 
-            if (uploadedFiles.length > 0) {
-                preview.classList.remove('hidden');
-                pageSection.classList.remove('hidden');
+            preview.classList.remove('hidden');
+            document.getElementById('file-name').textContent = uploadedFile.name;
+            document.getElementById('file-size').textContent = (uploadedFile.size / 1024 / 1024).toFixed(2) + ' MB';
+
+            const icon = document.getElementById('file-icon');
+            if (uploadedFile.type.includes('pdf')) {
+                icon.className = 'fas fa-file-pdf text-red-500 text-2xl';
+            } else {
+                icon.className = 'fas fa-file-image text-blue-500 text-2xl';
+            }
+
+            if (selectedDocType && DOC_TYPES[selectedDocType].standard) {
                 btn.classList.remove('hidden');
                 btn.disabled = false;
-
-                list.innerHTML = uploadedFiles.map((file, idx) => `
-                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                        <div class="flex items-center gap-3">
-                            <i class="fas fa-file-${file.type.includes('pdf') ? 'pdf text-red-500' : 'image text-blue-500'} text-xl"></i>
-                            <div>
-                                <p class="font-medium text-gray-900">${file.name}</p>
-                                <p class="text-xs text-gray-500">${(file.size / 1024).toFixed(1)} KB</p>
-                            </div>
-                        </div>
-                        <button onclick="removeFile(${idx})" class="text-red-500 hover:text-red-700">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                `).join('');
-            } else {
-                preview.classList.add('hidden');
-                pageSection.classList.add('hidden');
-                btn.classList.add('hidden');
             }
         }
 
-        function removeFile(idx) {
-            uploadedFiles.splice(idx, 1);
-            renderFiles();
-        }
-
-        function adjustPages(delta) {
-            const input = document.getElementById('page-count');
-            let val = parseInt(input.value) + delta;
-            if (val < 1) val = 1;
-            if (val > 100) val = 100;
-            input.value = val;
-            updatePrice();
-        }
-
-        document.getElementById('page-count').addEventListener('change', updatePrice);
-
-        function updatePrice() {
-            const pages = parseInt(document.getElementById('page-count').value) || 1;
-            const targetLang = document.getElementById('target-lang').value;
-            const isSworn = document.getElementById('sworn').checked;
-            const isUrgent = document.getElementById('urgent').checked;
-
-            const langMultiplier = PRICING.langMultipliers[targetLang] || PRICING.langMultipliers.default;
-
-            // Calculate
-            let base = PRICING.basePerPage * pages * langMultiplier;
-            let langExtra = (langMultiplier - 1) * PRICING.basePerPage * pages;
-            let total = base;
-
-            if (isSworn) total += PRICING.swornFee;
-
-            let urgentAmount = 0;
-            if (isUrgent) {
-                urgentAmount = total * 0.5;
-                total *= PRICING.urgentMultiplier;
-            }
-
-            // Update UI
-            document.getElementById('summary-pages').textContent = pages;
-            document.getElementById('price-base').textContent = `€${(PRICING.basePerPage * pages).toFixed(2)}`;
-
-            const langRow = document.getElementById('price-lang-row');
-            if (langMultiplier > 1) {
-                langRow.classList.remove('hidden');
-                langRow.classList.add('flex');
-                document.getElementById('price-lang').textContent = `€${langExtra.toFixed(2)}`;
-            } else {
-                langRow.classList.add('hidden');
-            }
-
-            const swornRow = document.getElementById('price-sworn-row');
-            if (isSworn) {
-                swornRow.classList.remove('hidden');
-                swornRow.classList.add('flex');
-            } else {
-                swornRow.classList.add('hidden');
-            }
-
-            const urgentRow = document.getElementById('price-urgent-row');
-            if (isUrgent) {
-                urgentRow.classList.remove('hidden');
-                urgentRow.classList.add('flex');
-                document.getElementById('price-urgent').textContent = `€${urgentAmount.toFixed(2)}`;
-            } else {
-                urgentRow.classList.add('hidden');
-            }
-
-            document.getElementById('price-total').textContent = `€${total.toFixed(2)}`;
-            document.getElementById('final-total').textContent = `€${total.toFixed(2)}`;
-            document.getElementById('pay-amount').textContent = `€${total.toFixed(2)}`;
+        function removeFile() {
+            uploadedFile = null;
+            document.getElementById('file-preview').classList.add('hidden');
+            document.getElementById('btn-step1').classList.add('hidden');
+            document.getElementById('file-input').value = '';
         }
 
         function goToStep(step) {
@@ -469,7 +490,11 @@
             document.getElementById('progress1').style.width = step > 1 ? '100%' : '0%';
             document.getElementById('progress2').style.width = step > 2 ? '100%' : '0%';
 
-            // Update order summary on step 3
+            // Update summaries
+            if (step === 2) {
+                document.getElementById('summary-doc-type').textContent = DOC_TYPES[selectedDocType].name;
+            }
+
             if (step === 3) {
                 updateOrderSummary();
             }
@@ -478,36 +503,44 @@
         }
 
         function updateOrderSummary() {
-            const pages = document.getElementById('page-count').value;
             const sourceLang = document.getElementById('source-lang').selectedOptions[0].text;
             const targetLang = document.getElementById('target-lang').selectedOptions[0].text;
-            const isSworn = document.getElementById('sworn').checked;
-            const isUrgent = document.getElementById('urgent').checked;
 
             document.getElementById('order-summary').innerHTML = `
                 <div class="flex justify-between">
-                    <span class="text-gray-600">Documenti</span>
-                    <span>${uploadedFiles.length} file</span>
+                    <span class="text-gray-600">Documento</span>
+                    <span>${DOC_TYPES[selectedDocType].name}</span>
                 </div>
                 <div class="flex justify-between">
-                    <span class="text-gray-600">Pagine</span>
-                    <span>${pages}</span>
+                    <span class="text-gray-600">File</span>
+                    <span>${uploadedFile.name}</span>
                 </div>
                 <div class="flex justify-between">
                     <span class="text-gray-600">Traduzione</span>
                     <span>${sourceLang} → ${targetLang}</span>
                 </div>
-                ${isSworn ? '<div class="flex justify-between"><span class="text-gray-600">Tipo</span><span class="text-purple-600 font-medium">Giurata</span></div>' : ''}
-                ${isUrgent ? '<div class="flex justify-between"><span class="text-gray-600">Consegna</span><span class="text-orange-600 font-medium">Urgente 24h</span></div>' : ''}
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Tipo</span>
+                    <span class="text-purple-600 font-medium">Giurata con firma digitale</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Consegna</span>
+                    <span class="text-green-600 font-medium">Immediata via email</span>
+                </div>
             `;
         }
 
         function processPayment() {
-            const name = document.getElementById('customer-name').value;
-            const email = document.getElementById('customer-email').value;
+            const name = document.getElementById('customer-name').value.trim();
+            const email = document.getElementById('customer-email').value.trim();
 
             if (!name || !email) {
-                alert('Inserisci nome e email');
+                alert('Inserisci nome e email per la consegna');
+                return;
+            }
+
+            if (!email.includes('@')) {
+                alert('Inserisci un indirizzo email valido');
                 return;
             }
 
@@ -515,33 +548,26 @@
             btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Elaborazione...';
             btn.disabled = true;
 
-            // Simulate payment processing
+            // Simulate payment (in production: redirect to SumUp)
             setTimeout(() => {
-                // Generate order number
                 const orderNum = 'TRD-' + Date.now().toString(36).toUpperCase();
                 document.getElementById('order-number').textContent = orderNum;
 
-                // Hide step 3, show success
                 document.getElementById('step3').classList.add('hidden');
                 document.getElementById('success').classList.remove('hidden');
 
-                // In production: call SumUp API here
+                // Log order for demo
                 console.log('Order:', {
                     orderNumber: orderNum,
                     customer: { name, email },
-                    files: uploadedFiles.map(f => f.name),
-                    pages: document.getElementById('page-count').value,
+                    file: uploadedFile.name,
+                    docType: selectedDocType,
                     sourceLang: document.getElementById('source-lang').value,
                     targetLang: document.getElementById('target-lang').value,
-                    sworn: document.getElementById('sworn').checked,
-                    urgent: document.getElementById('urgent').checked,
-                    total: document.getElementById('final-total').textContent
+                    price: currentPrice
                 });
             }, 2000);
         }
-
-        // Initialize
-        updatePrice();
     </script>
 </body>
 </html>
