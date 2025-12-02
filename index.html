@@ -140,6 +140,11 @@
                         <p class="font-medium text-sm">Casellario</p>
                         <p class="text-xs text-gray-500">Certificato penale</p>
                     </button>
+                    <button onclick="selectDocType('visura')" class="doc-type-card p-4 border-2 border-blue-200 rounded-xl text-center transition-all cursor-pointer bg-blue-50" data-type="visura">
+                        <i class="fas fa-building text-2xl text-blue-600 mb-2"></i>
+                        <p class="font-medium text-sm">Visura Camerale</p>
+                        <p class="text-xs text-blue-600">da €86</p>
+                    </button>
                     <button onclick="selectDocType('voluminoso')" class="doc-type-card p-4 border-2 border-gray-200 rounded-xl text-center transition-all cursor-pointer" data-type="voluminoso">
                         <i class="fas fa-book text-2xl text-amber-500 mb-2"></i>
                         <p class="font-medium text-sm">Documento lungo</p>
@@ -173,11 +178,37 @@
                     <div class="flex items-center gap-3">
                         <i class="fas fa-check-circle text-green-500 text-2xl"></i>
                         <div>
-                            <p class="font-bold text-green-800">Prezzo fisso €50</p>
-                            <p class="text-sm text-green-700">Traduzione giurata con firma digitale • Consegna immediata</p>
+                            <p class="font-bold text-green-800" id="standard-price-title">Prezzo fisso €50</p>
+                            <p class="text-sm text-green-700" id="standard-price-desc">Traduzione giurata con firma digitale • Consegna immediata</p>
                         </div>
                     </div>
-                    <span class="text-2xl font-bold text-green-600">€50</span>
+                    <span class="text-2xl font-bold text-green-600" id="standard-price-amount">€50</span>
+                </div>
+            </div>
+
+            <!-- Visura Camerale Price Box -->
+            <div id="visura-price" class="hidden mb-6 p-4 bg-blue-50 border border-blue-200 rounded-xl">
+                <div class="flex items-center gap-3 mb-3">
+                    <i class="fas fa-building text-blue-500 text-2xl"></i>
+                    <div>
+                        <p class="font-bold text-blue-800">Visura Camerale - Prezzo speciale</p>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between p-3 bg-white rounded-lg border border-blue-100">
+                        <div>
+                            <p class="font-medium text-gray-800">Firma Digitale</p>
+                            <p class="text-xs text-gray-500">Consegna immediata via email</p>
+                        </div>
+                        <span class="text-xl font-bold text-blue-600">€100</span>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-white rounded-lg border border-green-200">
+                        <div>
+                            <p class="font-medium text-gray-800">Giuramento Tribunale <span class="text-green-600 text-xs ml-1">RISPARMIA €14</span></p>
+                            <p class="text-xs text-gray-500">Marca da bollo inclusa • Consegna giorno successivo</p>
+                        </div>
+                        <span class="text-xl font-bold text-green-600">€86</span>
+                    </div>
                 </div>
             </div>
 
@@ -489,6 +520,7 @@
             anagrafe: { name: 'Certificato anagrafe', price: 50, standard: true },
             diploma: { name: 'Diploma/Laurea', price: 50, standard: true },
             casellario: { name: 'Casellario giudiziale', price: 50, standard: true },
+            visura: { name: 'Visura camerale', price: 100, tribunalPrice: 86, standard: false, isVisura: true },
             voluminoso: { name: 'Documento lungo', price: null, standard: false, calculator: true },
             altro: { name: 'Altro documento', price: 50, standard: true }
         };
@@ -503,6 +535,7 @@
             });
             document.getElementById('country-block-warning').classList.add('hidden');
             document.getElementById('standard-price').classList.add('hidden');
+            document.getElementById('visura-price').classList.add('hidden');
             document.getElementById('character-calculator').classList.add('hidden');
             document.getElementById('upload-section').classList.add('hidden');
             document.getElementById('btn-step1').classList.add('hidden');
@@ -530,6 +563,7 @@
                 document.getElementById('country-block-warning').classList.remove('hidden');
                 document.getElementById('block-reason').textContent = BLOCK_REASONS[selectedCountry];
                 document.getElementById('standard-price').classList.add('hidden');
+                document.getElementById('visura-price').classList.add('hidden');
                 document.getElementById('character-calculator').classList.add('hidden');
                 document.getElementById('upload-section').classList.add('hidden');
                 document.getElementById('btn-step1').classList.add('hidden');
@@ -553,9 +587,18 @@
             // Hide warning
             document.getElementById('country-block-warning').classList.add('hidden');
 
-            if (config.calculator) {
+            if (config.isVisura) {
+                // Visura camerale - special pricing
+                document.getElementById('standard-price').classList.add('hidden');
+                document.getElementById('visura-price').classList.remove('hidden');
+                document.getElementById('character-calculator').classList.add('hidden');
+                document.getElementById('upload-section').classList.remove('hidden');
+                basePrice = config.price; // €100 for digital
+                translationPrice = 0;
+            } else if (config.calculator) {
                 // Show calculator for voluminous documents
                 document.getElementById('standard-price').classList.add('hidden');
+                document.getElementById('visura-price').classList.add('hidden');
                 document.getElementById('character-calculator').classList.remove('hidden');
                 document.getElementById('upload-section').classList.remove('hidden');
                 translationPrice = 0;
@@ -563,6 +606,7 @@
             } else {
                 // Standard pricing
                 document.getElementById('standard-price').classList.remove('hidden');
+                document.getElementById('visura-price').classList.add('hidden');
                 document.getElementById('character-calculator').classList.add('hidden');
                 document.getElementById('upload-section').classList.remove('hidden');
                 basePrice = config.price;
@@ -603,17 +647,31 @@
 
         function updateSignatureType() {
             signatureType = document.querySelector('input[name="signature-type"]:checked').value;
+            const isVisura = selectedDocType === 'visura';
 
             if (signatureType === 'tribunal') {
-                document.getElementById('tribunal-pages').classList.remove('hidden');
                 document.getElementById('signature-feature').textContent = 'Giuramento in Tribunale';
                 document.getElementById('delivery-feature').textContent = 'Consegna il giorno successivo';
-                updateTribunalPrice();
+
+                if (isVisura) {
+                    // Visura camerale: prezzo fisso €86 (marca inclusa)
+                    document.getElementById('tribunal-pages').classList.add('hidden');
+                    basePrice = 86;
+                    bolloPrice = 0;
+                } else {
+                    // Altri documenti: calcola marche da bollo
+                    document.getElementById('tribunal-pages').classList.remove('hidden');
+                    updateTribunalPrice();
+                }
             } else {
                 document.getElementById('tribunal-pages').classList.add('hidden');
                 document.getElementById('signature-feature').textContent = 'Firma digitale qualificata';
                 document.getElementById('delivery-feature').textContent = 'Consegna via email immediata';
                 bolloPrice = 0;
+
+                if (isVisura) {
+                    basePrice = 100; // Visura digitale €100
+                }
             }
 
             updateTotalPrice();
